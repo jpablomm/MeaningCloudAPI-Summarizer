@@ -1,7 +1,6 @@
 
-
-const getTemperature= async (url, zipcode, key) => {
-    const newURL = url + zipcode + key;
+const getSummary = async (url, text, key) => {
+    const newURL = url + key + '&url=' + text + '&sentences=5';
     console.log(newURL);
     const res = await fetch(newURL);
     console.log(res);
@@ -14,4 +13,4 @@ const getTemperature= async (url, zipcode, key) => {
     }
 };
 
-export {getTemperature};
+export {getSummary};

@@ -49,10 +49,12 @@ app.post('/add', (req, res) => {
     console.log(req);
     console.log(req.body);
     const newEntry = {
-        temp: req.body,
+        summary: req.body,
     };
     console.log(newEntry);
     projectData = newEntry;
     res.send(projectData);
     console.log(projectData);
 });
+
+console.log(`Your API key is ${process.env.API_KEY}`);
