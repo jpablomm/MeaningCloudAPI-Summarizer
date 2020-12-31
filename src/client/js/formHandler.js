@@ -1,18 +1,32 @@
-import { checkForName } from './nameChecker';
+import { getTemperature } from './getTemperature';
+import { postData } from './postData';
+import { updateUI } from './updateUI';
+
+
+// Weather API
+const base_url = 'http://api.openweathermap.org/data/2.5/weather?zip=';
+const api_key = '&appid=5d10671a156bc50f016005850c1b873a&units=metric';
+
+// meaninn cloud API
+const API = 'bf085169b57e36115f7a5c37685392de';
 
 function handleSubmit(event) {
-    event.preventDefault()
+    event.preventDefault();
 
-    // check what text was put into the form field
-    let formText = document.getElementById('name').value
-    Client.checkForName(formText)
-
+    let formText = document.getElementById('name').value;
+    console.log(formText);
     console.log("::: Form Submitted :::")
-    fetch('http://localhost:8081/test')
-    .then(res => res.json())
-    .then(function(res) {
-        document.getElementById('results').innerHTML = res.message
-    })
-}
+    Client.getTemperature(base_url, formText, api_key)
+        .then((data)=> {
+            console.log(data);
+            console.log(data.main.temp);
+            Client.postData('http://localhost:8081/add', data.main.temp); 
+        })
+        .then(() => {
+            console.log('Updating UI');
+            Client.updateUI();
+        });
+};
 
-export { handleSubmit }
+
+export { handleSubmit, getTemperature, postData, updateUI }
