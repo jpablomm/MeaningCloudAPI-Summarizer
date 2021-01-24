@@ -5,6 +5,7 @@ var https = require('follow-redirects').https;
 var fs = require('fs');
 const express = require('express');
 const axios = require("axios");
+const regeneratorRuntime = require("regenerator-runtime");
 
 const dotenv = require('dotenv');
 dotenv.config();
