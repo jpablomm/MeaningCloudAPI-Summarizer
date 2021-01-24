@@ -5,6 +5,7 @@ var https = require('follow-redirects').https;
 var fs = require('fs');
 const express = require('express');
 const mockAPIResponse = require('./mockAPI.js');
+const axios = require("axios");
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -27,10 +28,6 @@ app.use(express.static('dist'))
 
 console.log(__dirname)
 
-// API credentials configuration
-// const textapi = new meaning({
-//     application_key: process.env.API_KEY
-// })
 
 app.get('/', function (req, res) {
     res.sendFile(path.resolve('src/client/views/index.html'))
@@ -51,7 +48,7 @@ app.get('/test', function (req, res) {
 });
 
 // API call
-app.post('/api_call', (req, res) => {
+/* app.post('/api_call', (req, res) => {
     console.log(req.body.url);
     const user_url = req.body.url;
 
@@ -85,9 +82,10 @@ app.post('/api_call', (req, res) => {
           console.error(error);
         });
       });
+    res.send(req1);
     req1.end();
     
-});
+}); */
 
 // POST route to add temperature, date, user response
 app.post('/add', (req, res) => {
@@ -118,3 +116,28 @@ const getSummary = async (text) => {
         console.log("error", error);
     }
 };
+
+app.post('/api_call', async (req, res) => {
+    const userInput = req.body;
+
+    try {
+        const apiData = await fetchAPI(userInput);
+        let summary = JSON.stringify(apiData);
+        res.status(200).send(summary);
+    } catch (e) {
+        res.send(400).send(e);
+    }
+});
+
+const fetchAPI = async (data) => {
+    console.log("FetchAPI data input:", data);
+    const res = await axios(
+        BASE_API_URL + process.env.API_KEY + '&url=' + data.url + '&sentences=5'
+    );
+    try {
+        console.log("Fetch API res.data: ",res.data);
+        return res.data;
+    } catch (e) {
+        console.log("Error",e)
+    }
+}
