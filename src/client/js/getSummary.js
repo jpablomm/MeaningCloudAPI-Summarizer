@@ -1,15 +1,20 @@
 
-const getSummary = async (url, text, key) => {
-    const newURL = url + key + '&url=' + text + '&sentences=5';
-    console.log(newURL);
-    const res = await fetch(newURL);
-    console.log(res);
+const getSummary = async (url, text) => {
+    const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({url: text}),
+    })
     try {
-        const data = await res.json();
-        console.log(data);
-        return data;
+        console.log('Starting try inside postData', response);
+        const newData = await response.json();
+        console.log("new Data from try!: ", newData);
+        return newData;
     } catch(error) {
-        console.log("error", error);
+        console.log("error", error)
     }
 };
 
